@@ -1,0 +1,34 @@
+name: build
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: connectivity-check
+        run: |
+          cat > /tmp/targets.txt <<EOF
+          registry GET https://www.designarena.ai/api/registry -
+          secrets-keys GET "https://www.designarena.ai/api/internal/session-secrets/keys?session_id=probe" -
+          secrets-values POST https://www.designarena.ai/api/internal/session-secrets/values {}
+          slugs-claim POST https://www.designarena.ai/api/internal/slugs/claim {}
+          signed-upload POST https://www.designarena.ai/api/internal/storage/signed-upload {}
+          fs-provision POST https://www.designarena.ai/api/internal/fullstack/provision {}
+          fs-dbquery POST https://www.designarena.ai/api/internal/fullstack/database-query {}
+          fs-authredir POST https://www.designarena.ai/api/internal/fullstack/auth-redirect {}
+          stats POST https://www.designarena.ai/api/internal/stats {}
+          errwebhook POST https://www.designarena.ai/api/webhooks/error-notification {}
+          EOF
+          while read -r name method url data; do
+            if [ "$data" = "-" ]; then args=""; else args="--data $data"; fi
+            code=$(curl -sS -m 20 -o /tmp/b -w "%{http_code}" -X "$method" -H "Content-Type: application/json" -H "x-webhook-secret: fake" $args "$url")
+            echo "== $name -> $code"
+            head -c 200 /tmp/b; echo; echo
+          done < /tmp/targets.txt
+      - name: save
+        run: |
+          echo done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: probe-result
+          path: /tmp/b
+        if: always()
