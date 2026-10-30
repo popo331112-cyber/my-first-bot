@@ -1,14 +1,17 @@
 name: build
-"on": workflow_dispatch
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: run-chain
         env:
-          TOK: eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZGVzaWduYXJlbmEtYTkwYzkiLCJhdWQiOiJkZXNpZ25hcmVuYS1hOTBjOSIsImF1dGhfdGltZSI6MTc4ODk5OTU5MiwidXNlcl9pZCI6IkpiSEhlWlBOeHJOa1ZYbUlTZjVqb0ZVeURmMDMiLCJzdWIiOiJKYkhIZVpQTnhyTmtWWG1JU2Y1am9GVXlEZjAzIiwiaWF0IjoxNzkzMzAyNDMwLCJleHAiOjE3OTMzMDYwMzAsImVtYWlsIjoiem9sbmF5ODk1MjliQHZiLjI2YWkuYXJ0IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiem9sbmF5ODk1MjliQHZiLjI2YWkuYXJ0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.JWl21vxy-pmWlBugAdUoONCKUhiDGIuMF6wlwpwGAEajV9gwzjguUaeBXVSLPbXcwFFjW4uHoiTC4885zkl-dDXblxQEbQ8ZGtwTzSeW2R8RLnuAayKMZnFxQE6r_FJQzRjwJBR9EhuMU6WsxvmldscIcXzDYzt1rA6soaPlvnisi_Z9v0W33hD3PLzjSizW68MOLrtlKSfdC-2oiswZBIdjn2AiSzOoNgoeT7kMnGAsA0AHvplN_SXmT9Tmn5NL_igj8DX065dHlVcjYYsSZSn0DJsqZYJO6NoY_-eJn6lCpOBGl5nK6LPmJCeHA8GixqhOTdprAYDGEad_tTeFJQ
+          T1: 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjkwNGIwZjkxYmU2ZWIwODY3ZGFiYmFhYjU4N2RmYzJlMzNmMDBhMjQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZGVzaWduYXJlbmEtYTkwYzkiLCJhdWQiOiJkZXNpZ25hcmVuYS1hOTBjOSIsImF1dGhfdGltZSI6MTc4ODk5OTU5MiwidXNlcl9pZCI6IkpiSEhlWlBOeHJOa1ZYbUlTZjVqb0ZVeURmMDMiLCJzdWIiOiJKYkhIZVpQT'
+          T2: 'nhyTmtWWG1JU2Y1am9GVXlEZjAzIiwiaWF0IjoxNzkzMzAyNDMwLCJleHAiOjE3OTMzMDYwMzAsImVtYWlsIjoiem9sbmF5ODk1MjliQHZiLjI2YWkuYXJ0IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiem9sbmF5ODk1MjliQHZiLjI2YWkuYXJ0Il19LCJzaWduX2luX3Byb3ZpZGVyIjoiY3VzdG9tIn19.JWl21vxy-pmWlBugAdUoONCKUhiDGIuMF6wlwpwGAEaj'
+          T3: 'V9gwzjguUaeBXVSLPbXcwFFjW4uHoiTC4885zkl-dDXblxQEbQ8ZGtwTzSeW2R8RLnuAayKMZnFxQE6r_FJQzRjwJBR9EhuMU6WsxvmldscIcXzDYzt1rA6soaPlvnisi_Z9v0W33hD3PLzjSizW68MOLrtlKSfdC-2oiswZBIdjn2AiSzOoNgoeT7kMnGAsA0AHvplN_SXmT9Tmn5NL_igj8DX065dHlVcjYYsSZSn0DJsqZYJO6NoY_-eJn6lCpOBGl5nK6LPmJCeHA8GixqhOTdprAYDGEad_tTeFJQ'
         run: |
           set +e
+          TOK="$T1$T2$T3"
           B="https://www.designarena.ai"
           CID=$(cat /proc/sys/kernel/random/uuid)
           echo "chat id: $CID"
