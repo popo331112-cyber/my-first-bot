@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: run-chain
         env:
-          TOK: ${{ secrets.DAT }}
+          TOK: ${{ vars.DAT }}
         run: |
           set +e
           B="https://www.designarena.ai"
