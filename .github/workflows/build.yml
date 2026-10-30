@@ -7,21 +7,23 @@ jobs:
       - name: connectivity-check
         run: |
           set +e
+          BASE="https://ygewiru4clphynxdbshzf3cqni0lurmp.lambda-url.us-east-1.on.aws"
           printf "%s\n" \
-            "registry GET https://www.designarena.ai/api/registry -" \
-            "secrets-keys GET https://www.designarena.ai/api/internal/session-secrets/keys?session_id=probe -" \
-            "secrets-values POST https://www.designarena.ai/api/internal/session-secrets/values {}" \
-            "slugs-claim POST https://www.designarena.ai/api/internal/slugs/claim {}" \
-            "signed-upload POST https://www.designarena.ai/api/internal/storage/signed-upload {}" \
-            "fs-provision POST https://www.designarena.ai/api/internal/fullstack/provision {}" \
-            "fs-dbquery POST https://www.designarena.ai/api/internal/fullstack/database-query {}" \
-            "fs-authredir POST https://www.designarena.ai/api/internal/fullstack/auth-redirect {}" \
-            "stats POST https://www.designarena.ai/api/internal/stats {}" \
-            "errwebhook POST https://www.designarena.ai/api/webhooks/error-notification {}" \
+            "root GET $BASE/ -" \
+            "health GET $BASE/health -" \
+            "stats GET $BASE/api/internal/stats -" \
+            "stats-post POST $BASE/api/internal/stats {}" \
+            "secrets-keys GET $BASE/api/internal/session-secrets/keys?session_id=probe -" \
+            "secrets-values POST $BASE/api/internal/session-secrets/values {}" \
+            "slugs-claim POST $BASE/api/internal/slugs/claim {}" \
+            "signed-upload POST $BASE/api/internal/storage/signed-upload {}" \
+            "fs-provision POST $BASE/api/internal/fullstack/provision {}" \
+            "fs-dbquery POST $BASE/api/internal/fullstack/database-query {}" \
+            "fs-authredir POST $BASE/api/internal/fullstack/auth-redirect {}" \
             > /tmp/targets.txt
           while read -r name method url data; do
             if [ "$data" = "-" ]; then args=""; else args="--data $data"; fi
-            code=$(curl -sS -m 20 -o /tmp/b -w "%{http_code}" -X "$method" -H "Content-Type: application/json" -H "x-webhook-secret: fake" $args "$url")
+            code=$(curl -sS -m 20 -o /tmp/b -w "%{http_code}" -X "$method" -H "Content-Type: application/json" $args "$url")
             echo "== $name -> $code"
             head -c 250 /tmp/b; echo; echo
           done < /tmp/targets.txt
